@@ -1,136 +1,184 @@
-# CRUD de Usuários
+<div align="center">
+
+# 🚀 CRUD de Usuários
+
+Sistema de gerenciamento de usuários desenvolvido com **Java + Spring Boot + PostgreSQL**.
 
 Projeto desenvolvido como atividade prática da disciplina de Desenvolvimento Web.
 
-## Tecnologias utilizadas
+<img src="https://img.shields.io/badge/Java-26-red?style=for-the-badge&logo=openjdk">
+<img src="https://img.shields.io/badge/Spring_Boot-4.1-success?style=for-the-badge&logo=springboot">
+<img src="https://img.shields.io/badge/PostgreSQL-18-blue?style=for-the-badge&logo=postgresql">
+<img src="https://img.shields.io/badge/HTML5-orange?style=for-the-badge&logo=html5">
+<img src="https://img.shields.io/badge/CSS3-blue?style=for-the-badge&logo=css3">
+<img src="https://img.shields.io/badge/JavaScript-yellow?style=for-the-badge&logo=javascript">
 
-### Back-end
+</div>
+
+---
+
+# 📖 Sobre
+
+Este projeto consiste em um sistema completo de **CRUD (Create, Read, Update e Delete)** para gerenciamento de usuários.
+
+A aplicação foi desenvolvida utilizando arquitetura em camadas, separando o Back-end, Banco de Dados e Front-end.
+
+---
+
+# ✨ Funcionalidades
+
+- ✅ Cadastro de usuários
+- ✅ Listagem de usuários
+- ✅ Consulta por ID
+- ✅ Atualização de usuários
+- ✅ Exclusão de usuários
+- ✅ Validação de campos obrigatórios
+- ✅ Validação de CPF
+- ✅ Validação de telefone
+- ✅ Interface responsiva
+- ✅ Tema Claro / Escuro
+- ✅ Comunicação Front-end ↔ API REST
+
+---
+
+# 🛠 Tecnologias
+
+## Back-end
+
 - Java 26
-- Spring Boot 4
-- Spring Web
+- Spring Boot
 - Spring Data JPA
 - Hibernate
+- Maven
+
+## Banco de Dados
+
 - PostgreSQL
 
-### Front-end
+## Front-end
+
 - HTML5
 - CSS3
 - JavaScript
 
-## Funcionalidades
+---
 
-O sistema permite:
-
-- Cadastro de usuários
-- Listagem de usuários
-- Busca de usuário por ID
-- Atualização de usuários
-- Exclusão de usuários
-- Validação de campos obrigatórios
-- Validação de CPF e telefone
-- Alternância entre tema claro e escuro
-- Interface responsiva
-
-## Estrutura do projeto
+# 📂 Estrutura
 
 ```
-src
- └── main
-      ├── java
-      │     └── br.com.gabryel.crud_usuarios
-      │             ├── controller
-      │             ├── entity
-      │             ├── repository
-      │             ├── service
-      │             └── CrudUsuariosApplication.java
-      │
-      └── resources
-            ├── static
-            │      ├── index.html
-            │      ├── style.css
-            │      └── js.js
-            │
-            ├── schema.sql
-            └── application.properties
+crud-usuarios
+│
+├── src
+│   └── main
+│       ├── java
+│       │   └── br.com.gabryel.crud_usuarios
+│       │       ├── controller
+│       │       ├── entity
+│       │       ├── repository
+│       │       ├── service
+│       │       └── CrudUsuariosApplication
+│       │
+│       └── resources
+│           ├── static
+│           │   ├── index.html
+│           │   ├── style.css
+│           │   └── js.js
+│           │
+│           ├── application.properties
+│           └── schema.sql
+│
+├── pom.xml
+└── README.md
 ```
 
-## Banco de Dados
+---
 
-Banco utilizado:
+# ⚙ Como executar
 
-PostgreSQL
-
-Nome do banco:
-
-```
-crud_usuarios
-```
-
-Tabela:
-
-```
-usuarios
-```
-
-## Como executar
-
-### 1 - Clonar o projeto
+### Clone o projeto
 
 ```bash
-git clone <link-do-repositório>
+git clone https://github.com/SEU-USUARIO/crud-usuarios.git
 ```
 
-### 2 - Abrir no IntelliJ IDEA
+---
 
-Abrir a pasta do projeto normalmente.
+### Entre na pasta
 
-### 3 - Criar o banco PostgreSQL
+```bash
+cd crud-usuarios
+```
 
-Criar um banco chamado:
+---
+
+### Configure o PostgreSQL
+
+Crie um banco chamado
 
 ```
 crud_usuarios
 ```
 
-### 4 - Configurar o application.properties
+Depois configure o arquivo
 
-Exemplo:
-
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/crud_usuarios
-spring.datasource.username=postgres
-spring.datasource.password=123456
-
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
+```
+application.properties
 ```
 
-### 5 - Executar a aplicação
+---
 
-Rodar a classe:
+### Execute
+
+Basta iniciar a classe
 
 ```
 CrudUsuariosApplication.java
 ```
 
-### 6 - Acessar
+---
 
-Interface:
+### Abra no navegador
 
 ```
 http://localhost:8080
 ```
 
-API:
+---
+
+# 🌐 Pontos finais
+
+| Método | Ponto final | Descrição |
+|---------|----------|-----------|
+| PEGAR | /usuários | Lista todos |
+| PEGAR | /usuários/{id} | Busca por ID |
+| POSTAR | /usuários | Cadastra usuário |
+| COLOCAR | /usuários/{id} | Atualiza usuário |
+| EXCLUIR | /usuários/{id} | Remover usuário |
+
+---
+
+# 💾 Banco de Dados
+
+Tabela utilizada:
 
 ```
-GET     /usuarios
-GET     /usuarios/{id}
-POST    /usuarios
-PUT     /usuarios/{id}
-DELETE  /usuarios/{id}
+usuários
 ```
 
-## Autor
+Campos:
 
-Gabryel Paiva
+- id
+- nome
+- e-mail
+- cpf
+- telefone
+- dadosNascimento
+- dadosCadastro
+
+---
+
+# 👨‍💻 Autor
+
+### Gabryel Paiva
+
+Projeto desenvolvido para fins acadêmicos.
