@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD de Usuários</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-theme="dark">
+
+<div class="stars-wrap" aria-hidden="true">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>
+</div>
+
+<div class="container">
+
+    <div class="header">
+        <div class="header-top">
+            <div>
+                <p class="eyebrow">Painel administrativo</p>
+                <h1>Cadastro de Usuários</h1>
+                <p class="subtitle">Sistema de gerenciamento de usuários</p>
+            </div>
+
+            <label class="switch" title="Alternar tema claro/escuro">
+                <input type="checkbox" id="themeToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="card">
+
+        <h2>Novo Usuário</h2>
+
+        <form id="formUsuario">
+
+            <input type="hidden" id="id">
+
+            <div class="grid">
+
+                <div class="campo">
+                    <label>Nome</label>
+                    <input
+                            type="text"
+                            id="nome"
+                            placeholder="Digite o nome"
+                            required>
+                </div>
+
+                <div class="campo">
+                    <label>E-mail</label>
+                    <input
+                            type="email"
+                            id="email"
+                            placeholder="Digite o e-mail"
+                            required>
+                </div>
+
+                <div class="campo">
+                    <label>CPF</label>
+                    <input
+                            type="text"
+                            id="cpf"
+                            placeholder="000.000.000-00"
+                            inputmode="numeric"
+                            maxlength="14"
+                            required>
+                    <span class="erro" id="erroCpf"></span>
+                </div>
+
+                <div class="campo">
+                    <label>Telefone</label>
+                    <input
+                            type="text"
+                            id="telefone"
+                            placeholder="(00) 00000-0000"
+                            inputmode="numeric"
+                            maxlength="15"
+                            required>
+                    <span class="erro" id="erroTelefone"></span>
+                </div>
+
+                <div class="campo">
+                    <label>Data de nascimento</label>
+                    <input
+                            type="date"
+                            id="dataNascimento"
+                            required>
+                </div>
+
+            </div>
+
+            <button type="submit" class="pushable btn-salvar">
+                <span class="shadow"></span>
+                <span class="edge"></span>
+                <span class="front">Salvar Usuário</span>
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Usuários cadastrados</h2>
+
+        <div class="table-wrap">
+            <table>
+
+                <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>CPF</th>
+                    <th>Telefone</th>
+                    <th>Nascimento</th>
+                    <th>Ações</th>
+                </tr>
+
+                </thead>
+
+                <tbody id="tabelaUsuarios">
+
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="js.js"></script>
+
+</body>
+</html>
