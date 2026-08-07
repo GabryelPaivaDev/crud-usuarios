@@ -27,16 +27,9 @@ themeToggle.addEventListener("change", function () {
 });
 
 function aplicarTema(tema) {
-
     document.body.setAttribute("data-theme", tema);
-
     themeToggle.checked = tema === "light";
-
     localStorage.setItem("tema", tema);
-
-    gerarEstrelas("stars", 200, 2);
-    gerarEstrelas("stars2", 90, 3);
-    gerarEstrelas("stars3", 250, 1);
 }
 
 /* =========================================================
@@ -92,6 +85,284 @@ function validarTelefone() {
 
     return valido;
 }
+
+/* =========================================================
+   Modal de confirmação (excluir / editar)
+   ========================================================= */
+
+const modalOverlay = document.getElementById("modalOverlay");
+const modalBox = document.getElementById("modalBox");
+const modalIcon = document.getElementById("modalIcon");
+const modalIconSvg = document.getElementById("modalIconSvg");
+const modalTitulo = document.getElementById("modalTitulo");
+const modalMensagem = document.getElementById("modalMensagem");
+const modalCancelar = document.getElementById("modalCancelar");
+const modalConfirmar = document.getElementById("modalConfirmar");
+const modalConfirmarTexto = document.getElementById("modalConfirmarTexto");
+
+const ICONE_EXCLUIR = '<path d="M4 7h16M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m2 0v13a2 2 0 01-2 2H8a2 2 0 01-2-2V7h12zM10 11v6M14 11v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>';
+const ICONE_EDITAR = '<path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>';
+
+function confirmarAcao(opcoes) {
+
+    return new Promise(function (resolve) {
+
+        modalTitulo.textContent = opcoes.titulo;
+        modalMensagem.textContent = opcoes.mensagem;
+        modalConfirmarTexto.textContent = opcoes.textoConfirmar || "Confirmar";
+
+        modalIconSvg.innerHTML = opcoes.perigo ? ICONE_EXCLUIR : ICONE_EDITAR;
+        modalIcon.classList.toggle("perigo", !!opcoes.perigo);
+        modalConfirmar.classList.toggle("excluir", !!opcoes.perigo);
+
+        modalOverlay.classList.add("aberto");
+
+        function encerrar(resultado) {
+            modalOverlay.classList.remove("aberto");
+            modalConfirmar.removeEventListener("click", aoConfirmar);
+            modalCancelar.removeEventListener("click", aoCancelar);
+            modalOverlay.removeEventListener("click", aoClicarFora);
+            document.removeEventListener("keydown", aoTeclaEsc);
+            resolve(resultado);
+        }
+
+        function aoConfirmar() { encerrar(true); }
+        function aoCancelar() { encerrar(false); }
+
+        function aoClicarFora(evento) {
+            if (evento.target === modalOverlay) encerrar(false);
+        }
+
+        function aoTeclaEsc(evento) {
+            if (evento.key === "Escape") encerrar(false);
+        }
+
+        modalConfirmar.addEventListener("click", aoConfirmar);
+        modalCancelar.addEventListener("click", aoCancelar);
+        modalOverlay.addEventListener("click", aoClicarFora);
+        document.addEventListener("keydown", aoTeclaEsc);
+
+    });
+
+}
+
+/* =========================================================
+   Seletor de data customizado
+   ========================================================= */
+
+const dateField = document.getElementById("dateField");
+const dateIconBtn = document.getElementById("dateIconBtn");
+const calendarPop = document.getElementById("calendarPop");
+const calendarGrid = document.getElementById("calendarGrid");
+const calMonth = document.getElementById("calMonth");
+const calYear = document.getElementById("calYear");
+const calPrev = document.getElementById("calPrev");
+const calNext = document.getElementById("calNext");
+const calToday = document.getElementById("calToday");
+
+const MESES = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+
+let dataSelecionada = null;
+const hoje = new Date();
+let mesVisivel = hoje.getMonth();
+let anoVisivel = hoje.getFullYear();
+
+inicializarSeletoresCalendario();
+renderizarCalendario();
+
+function inicializarSeletoresCalendario() {
+
+    MESES.forEach(function (mes, indice) {
+        const opcao = document.createElement("option");
+        opcao.value = indice;
+        opcao.textContent = mes;
+        calMonth.appendChild(opcao);
+    });
+
+    const anoMinimo = hoje.getFullYear() - 100;
+    const anoMaximo = hoje.getFullYear();
+
+    for (let ano = anoMaximo; ano >= anoMinimo; ano--) {
+        const opcao = document.createElement("option");
+        opcao.value = ano;
+        opcao.textContent = ano;
+        calYear.appendChild(opcao);
+    }
+
+}
+
+function renderizarCalendario() {
+
+    calMonth.value = mesVisivel;
+    calYear.value = anoVisivel;
+
+    calendarGrid.innerHTML = "";
+
+    const primeiroDiaSemana = new Date(anoVisivel, mesVisivel, 1).getDay();
+    const diasNoMes = new Date(anoVisivel, mesVisivel + 1, 0).getDate();
+    const diasMesAnterior = new Date(anoVisivel, mesVisivel, 0).getDate();
+
+    for (let i = 0; i < 42; i++) {
+
+        const numeroDia = i - primeiroDiaSemana + 1;
+
+        let diaReal, mesReal, anoReal;
+
+        if (numeroDia < 1) {
+            diaReal = diasMesAnterior + numeroDia;
+            mesReal = mesVisivel - 1;
+            anoReal = anoVisivel;
+        } else if (numeroDia > diasNoMes) {
+            diaReal = numeroDia - diasNoMes;
+            mesReal = mesVisivel + 1;
+            anoReal = anoVisivel;
+        } else {
+            diaReal = numeroDia;
+            mesReal = mesVisivel;
+            anoReal = anoVisivel;
+        }
+
+        if (mesReal < 0) { mesReal = 11; anoReal--; }
+        if (mesReal > 11) { mesReal = 0; anoReal++; }
+
+        const dataCelula = new Date(anoReal, mesReal, diaReal);
+
+        const botao = document.createElement("button");
+        botao.type = "button";
+        botao.className = "calendar-dia";
+        botao.textContent = diaReal;
+
+        if (numeroDia < 1 || numeroDia > diasNoMes) {
+            botao.classList.add("fora-mes");
+        }
+
+        if (mesmaData(dataCelula, hoje)) {
+            botao.classList.add("hoje");
+        }
+
+        if (dataSelecionada && mesmaData(dataCelula, dataSelecionada)) {
+            botao.classList.add("selecionado");
+        }
+
+        botao.addEventListener("click", function () {
+            dataSelecionada = dataCelula;
+            mesVisivel = mesReal;
+            anoVisivel = anoReal;
+            dataNascimento.value = formatarDataBR(dataCelula);
+            renderizarCalendario();
+            fecharCalendario();
+        });
+
+        calendarGrid.appendChild(botao);
+
+    }
+
+}
+
+function mesmaData(a, b) {
+    return a.getFullYear() === b.getFullYear() &&
+        a.getMonth() === b.getMonth() &&
+        a.getDate() === b.getDate();
+}
+
+function formatarDataBR(data) {
+    const dia = String(data.getDate()).padStart(2, "0");
+    const mes = String(data.getMonth() + 1).padStart(2, "0");
+    return `${dia}/${mes}/${data.getFullYear()}`;
+}
+
+function formatarDataISO(data) {
+    const dia = String(data.getDate()).padStart(2, "0");
+    const mes = String(data.getMonth() + 1).padStart(2, "0");
+    return `${data.getFullYear()}-${mes}-${dia}`;
+}
+
+function isoParaData(iso) {
+    if (!iso) return null;
+    const [ano, mes, dia] = iso.split("-").map(Number);
+    return new Date(ano, mes - 1, dia);
+}
+
+function abrirCalendario() {
+
+    if (dataSelecionada) {
+        mesVisivel = dataSelecionada.getMonth();
+        anoVisivel = dataSelecionada.getFullYear();
+    }
+
+    renderizarCalendario();
+    calendarPop.classList.add("aberto");
+
+}
+
+function fecharCalendario() {
+    calendarPop.classList.remove("aberto");
+}
+
+dateIconBtn.addEventListener("click", function (evento) {
+    evento.stopPropagation();
+    calendarPop.classList.contains("aberto") ? fecharCalendario() : abrirCalendario();
+});
+
+dataNascimento.addEventListener("click", function (evento) {
+    evento.stopPropagation();
+    abrirCalendario();
+});
+
+calMonth.addEventListener("change", function () {
+    mesVisivel = Number(this.value);
+    renderizarCalendario();
+});
+
+calYear.addEventListener("change", function () {
+    anoVisivel = Number(this.value);
+    renderizarCalendario();
+});
+
+calPrev.addEventListener("click", function () {
+    mesVisivel--;
+    if (mesVisivel < 0) { mesVisivel = 11; anoVisivel--; }
+    renderizarCalendario();
+});
+
+calNext.addEventListener("click", function () {
+    mesVisivel++;
+    if (mesVisivel > 11) { mesVisivel = 0; anoVisivel++; }
+    renderizarCalendario();
+});
+
+calToday.addEventListener("click", function () {
+    mesVisivel = hoje.getMonth();
+    anoVisivel = hoje.getFullYear();
+    renderizarCalendario();
+});
+
+document.addEventListener("click", function (evento) {
+    if (!dateField.contains(evento.target)) {
+        fecharCalendario();
+    }
+});
+
+/* =========================================================
+   Esconder / mostrar tabela de usuários
+   ========================================================= */
+
+const toggleTabela = document.getElementById("toggleTabela");
+const tableCollapse = document.getElementById("tableCollapse");
+
+toggleTabela.addEventListener("click", function () {
+
+    const escondido = tableCollapse.classList.toggle("escondido");
+
+    toggleTabela.classList.toggle("escondido", escondido);
+    toggleTabela.setAttribute("aria-expanded", String(!escondido));
+    toggleTabela.setAttribute(
+        "aria-label",
+        escondido ? "Mostrar usuários cadastrados" : "Esconder usuários cadastrados"
+    );
+
+});
 
 /* =========================================================
    CRUD
@@ -159,7 +430,7 @@ form.addEventListener("submit", async function (e) {
         email: email.value,
         cpf: cpf.value,
         telefone: telefone.value,
-        dataNascimento: dataNascimento.value
+        dataNascimento: dataSelecionada ? formatarDataISO(dataSelecionada) : ""
 
     };
 
@@ -177,7 +448,19 @@ form.addEventListener("submit", async function (e) {
 
         });
 
+        limparFormulario();
+        listarUsuarios();
+
     } else {
+
+        const confirmou = await confirmarAcao({
+            titulo: "Confirmar edição",
+            mensagem: `Deseja salvar as alterações feitas em "${usuario.nome}"?`,
+            textoConfirmar: "Salvar alterações",
+            perigo: false
+        });
+
+        if (!confirmou) return;
 
         await fetch(`${API}/${id.value}`, {
 
@@ -191,10 +474,10 @@ form.addEventListener("submit", async function (e) {
 
         });
 
-    }
+        limparFormulario();
+        listarUsuarios();
 
-    limparFormulario();
-    listarUsuarios();
+    }
 
 });
 
@@ -208,7 +491,14 @@ async function editarUsuario(codigo) {
     email.value = usuario.email;
     cpf.value = usuario.cpf;
     telefone.value = usuario.telefone;
-    dataNascimento.value = usuario.dataNascimento;
+
+    dataSelecionada = isoParaData(usuario.dataNascimento);
+    dataNascimento.value = dataSelecionada ? formatarDataBR(dataSelecionada) : "";
+
+    if (dataSelecionada) {
+        mesVisivel = dataSelecionada.getMonth();
+        anoVisivel = dataSelecionada.getFullYear();
+    }
 
     window.scrollTo({
         top: 0,
@@ -219,10 +509,18 @@ async function editarUsuario(codigo) {
 
 async function excluirUsuario(codigo) {
 
-    const confirmar = confirm("Deseja realmente excluir este usuário?");
+    const linha = document.querySelector(`button.excluir[onclick="excluirUsuario(${codigo})"]`)
+        ?.closest("tr");
+    const nomeUsuario = linha ? linha.children[1].textContent : "este usuário";
 
-    if (!confirmar)
-        return;
+    const confirmou = await confirmarAcao({
+        titulo: "Excluir usuário",
+        mensagem: `Tem certeza que deseja excluir "${nomeUsuario}"? Esta ação não pode ser desfeita.`,
+        textoConfirmar: "Excluir",
+        perigo: true
+    });
+
+    if (!confirmou) return;
 
     await fetch(`${API}/${codigo}`, {
 
@@ -242,66 +540,10 @@ function limparFormulario() {
     cpf.value = "";
     telefone.value = "";
     dataNascimento.value = "";
+    dataSelecionada = null;
+    mesVisivel = hoje.getMonth();
+    anoVisivel = hoje.getFullYear();
     erroCpf.textContent = "";
     erroTelefone.textContent = "";
 
-}
-
-/* =========================================================
-   Campo estrelado (fundo animado)
-   ========================================================= */
-
-gerarEstrelas("stars", 200, 2);
-gerarEstrelas("stars2", 90, 3);
-gerarEstrelas("stars3", 250, 1);
-
-function gerarEstrelas(elementId, quantidade, tamanho) {
-
-    const el = document.getElementById(elementId);
-    if (!el) return;
-
-    const largura = 2000;
-    const altura = 2000;
-
-    const tema = document.body.getAttribute("data-theme");
-
-    const cor = tema === "light"
-        ? "#8b5cf6"
-        : "#ffffff";
-
-    const sombras = [];
-
-    for (let i = 0; i < quantidade; i++) {
-
-        const x = Math.floor(Math.random() * largura);
-        const y = Math.floor(Math.random() * altura);
-
-        sombras.push(`${x}px ${y}px ${cor}`);
-    }
-
-    const boxShadow = sombras.join(", ");
-
-    el.style.width = tamanho + "px";
-    el.style.height = tamanho + "px";
-    el.style.boxShadow = boxShadow;
-
-    const antigo = document.getElementById(elementId + "-style");
-    if (antigo) antigo.remove();
-
-    const style = document.createElement("style");
-    style.id = elementId + "-style";
-
-    style.textContent = `
-        #${elementId}::after{
-            content:"";
-            position:absolute;
-            top:${altura}px;
-            width:${tamanho}px;
-            height:${tamanho}px;
-            background:transparent;
-            box-shadow:${boxShadow};
-        }
-    `;
-
-    document.head.appendChild(style);
 }

@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRUD de Usuários</title>
 
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/favicon.ico">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -15,10 +18,12 @@
 
 <body data-theme="dark">
 
-<div class="stars-wrap" aria-hidden="true">
-    <div id="stars"></div>
-    <div id="stars2"></div>
-    <div id="stars3"></div>
+<div class="waves-wrap" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+    <span class="blob blob-4"></span>
+    <span class="blob blob-5"></span>
 </div>
 
 <div class="container">
@@ -38,108 +43,272 @@
         </div>
     </div>
 
-    <div class="card">
+    <div class="card card-split">
 
-        <h2>Novo Usuário</h2>
+        <div class="split-illustration">
+            <svg viewBox="0 0 400 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de pessoas preenchendo um formulário em um tablet">
 
-        <form id="formUsuario">
+                <circle cx="200" cy="170" r="155" fill="rgba(255,255,255,0.10)"/>
 
-            <input type="hidden" id="id">
+                <!-- mesa -->
+                <rect x="70" y="300" width="8" height="30" rx="4" fill="#ffffff" opacity=".85"/>
+                <rect x="322" y="300" width="8" height="30" rx="4" fill="#ffffff" opacity=".85"/>
+                <rect x="60" y="288" width="280" height="16" rx="8" fill="#ffffff"/>
 
-            <div class="grid">
+                <!-- tablet -->
+                <rect x="150" y="118" width="100" height="150" rx="16" fill="#ffffff"/>
+                <rect x="159" y="128" width="82" height="112" rx="8" fill="#12245a"/>
+                <circle cx="200" cy="256" r="5" fill="#dbe4ff"/>
 
-                <div class="campo">
-                    <label>Nome</label>
-                    <input
-                            type="text"
-                            id="nome"
-                            placeholder="Digite o nome"
-                            required>
+                <!-- ui dentro do tablet -->
+                <rect x="170" y="140" width="60" height="8" rx="4" fill="#ffffff" opacity=".85"/>
+                <rect x="170" y="156" width="44" height="6" rx="3" fill="#ffffff" opacity=".5"/>
+                <rect x="170" y="168" width="50" height="6" rx="3" fill="#ffffff" opacity=".5"/>
+                <rect x="170" y="180" width="38" height="6" rx="3" fill="#ffffff" opacity=".5"/>
+                <rect x="170" y="216" width="60" height="16" rx="8" fill="#ffd23f"/>
+
+                <!-- pessoa esquerda -->
+                <path d="M95 300 C95 255 105 228 128 228 C151 228 161 255 161 300 Z" fill="#ffd23f"/>
+                <circle cx="128" cy="205" r="21" fill="#f4c9a0"/>
+                <path d="M107 202 C104 182 118 168 130 168 C144 168 154 182 150 200 C142 190 118 190 107 202 Z" fill="#12245a"/>
+                <path d="M147 235 C158 232 166 222 168 210" stroke="#f4c9a0" stroke-width="11" stroke-linecap="round" fill="none"/>
+
+                <!-- pessoa direita -->
+                <path d="M240 300 C240 250 251 220 276 220 C301 220 312 250 312 300 Z" fill="#6f95ff"/>
+                <circle cx="276" cy="196" r="21" fill="#f4c9a0"/>
+                <path d="M255 193 C252 173 266 159 278 159 C292 159 302 173 298 191 C290 181 266 181 255 193 Z" fill="#12245a"/>
+                <path d="M252 230 C240 224 232 212 230 198" stroke="#f4c9a0" stroke-width="11" stroke-linecap="round" fill="none"/>
+
+                <!-- elementos flutuantes -->
+                <circle cx="70" cy="130" r="7" fill="#ffd23f"/>
+                <circle cx="340" cy="110" r="5" fill="#ffffff" opacity=".7"/>
+                <circle cx="330" cy="200" r="9" fill="#ffd23f" opacity=".8"/>
+                <rect x="55" y="230" width="16" height="16" rx="4" fill="#ffffff" opacity=".55" transform="rotate(18 63 238)"/>
+                <circle cx="60" cy="70" r="4" fill="#ffffff" opacity=".6"/>
+
+            </svg>
+        </div>
+
+        <div class="split-divider" aria-hidden="true"></div>
+
+        <div class="split-form">
+
+            <h2>Novo Usuário</h2>
+
+            <form id="formUsuario">
+
+                <input type="hidden" id="id">
+
+                <div class="grid">
+
+                    <div class="campo">
+                        <label>Nome</label>
+                        <input
+                                type="text"
+                                id="nome"
+                                placeholder="Digite o nome"
+                                required>
+                    </div>
+
+                    <div class="campo">
+                        <label>E-mail</label>
+                        <input
+                                type="email"
+                                id="email"
+                                placeholder="Digite o e-mail"
+                                required>
+                    </div>
+
+                    <div class="campo">
+                        <label>CPF</label>
+                        <input
+                                type="text"
+                                id="cpf"
+                                placeholder="000.000.000-00"
+                                inputmode="numeric"
+                                maxlength="14"
+                                required>
+                        <span class="erro" id="erroCpf"></span>
+                    </div>
+
+                    <div class="campo">
+                        <label>Telefone</label>
+                        <input
+                                type="text"
+                                id="telefone"
+                                placeholder="(00) 00000-0000"
+                                inputmode="numeric"
+                                maxlength="15"
+                                required>
+                        <span class="erro" id="erroTelefone"></span>
+                    </div>
+
+                    <div class="campo campo-data">
+                        <label>Data de nascimento</label>
+
+                        <div class="date-field" id="dateField">
+                            <input
+                                    type="text"
+                                    id="dataNascimento"
+                                    class="date-input"
+                                    placeholder="dd/mm/aaaa"
+                                    autocomplete="off"
+                                    readonly
+                                    required>
+
+                            <button type="button" class="date-icon-btn" id="dateIconBtn" aria-label="Abrir calendário">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="3" y="5" width="18" height="16" rx="3" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M8 3v4M16 3v4M3 10h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+
+                            <div class="calendar-pop" id="calendarPop">
+
+                                <div class="calendar-header">
+                                    <button type="button" class="calendar-nav" id="calPrev" aria-label="Mês anterior">
+                                        <svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </button>
+
+                                    <div class="calendar-selects">
+                                        <select id="calMonth" class="calendar-select"></select>
+                                        <select id="calYear" class="calendar-select"></select>
+                                    </div>
+
+                                    <button type="button" class="calendar-nav" id="calNext" aria-label="Próximo mês">
+                                        <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </button>
+                                </div>
+
+                                <div class="calendar-weekdays">
+                                    <span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span>
+                                </div>
+
+                                <div class="calendar-grid" id="calendarGrid"></div>
+
+                                <div class="calendar-footer">
+                                    <button type="button" class="calendar-today" id="calToday">Hoje</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
-                <div class="campo">
-                    <label>E-mail</label>
-                    <input
-                            type="email"
-                            id="email"
-                            placeholder="Digite o e-mail"
-                            required>
-                </div>
+                <button type="submit" class="pushable btn-salvar">
+                    <span class="shadow"></span>
+                    <span class="edge"></span>
+                    <span class="front">Salvar Usuário</span>
+                </button>
 
-                <div class="campo">
-                    <label>CPF</label>
-                    <input
-                            type="text"
-                            id="cpf"
-                            placeholder="000.000.000-00"
-                            inputmode="numeric"
-                            maxlength="14"
-                            required>
-                    <span class="erro" id="erroCpf"></span>
-                </div>
+            </form>
 
-                <div class="campo">
-                    <label>Telefone</label>
-                    <input
-                            type="text"
-                            id="telefone"
-                            placeholder="(00) 00000-0000"
-                            inputmode="numeric"
-                            maxlength="15"
-                            required>
-                    <span class="erro" id="erroTelefone"></span>
-                </div>
-
-                <div class="campo">
-                    <label>Data de nascimento</label>
-                    <input
-                            type="date"
-                            id="dataNascimento"
-                            required>
-                </div>
-
-            </div>
-
-            <button type="submit" class="pushable btn-salvar">
-                <span class="shadow"></span>
-                <span class="edge"></span>
-                <span class="front">Salvar Usuário</span>
-            </button>
-
-        </form>
-
-    </div>
-
-    <div class="card">
-
-        <h2>Usuários cadastrados</h2>
-
-        <div class="table-wrap">
-            <table>
-
-                <thead>
-
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>E-mail</th>
-                    <th>CPF</th>
-                    <th>Telefone</th>
-                    <th>Nascimento</th>
-                    <th>Ações</th>
-                </tr>
-
-                </thead>
-
-                <tbody id="tabelaUsuarios">
-
-                </tbody>
-
-            </table>
         </div>
 
     </div>
 
+    <div class="card">
+
+        <div class="card-heading">
+            <h2>Usuários cadastrados</h2>
+
+            <button type="button" class="toggle-tabela" id="toggleTabela" aria-expanded="true" aria-label="Esconder usuários cadastrados">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="table-collapse" id="tableCollapse">
+            <div class="table-wrap">
+                <table>
+
+                    <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>CPF</th>
+                        <th>Telefone</th>
+                        <th>Nascimento</th>
+                        <th>Ações</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody id="tabelaUsuarios">
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<footer class="site-footer">
+    <div class="footer-inner">
+
+        <div class="footer-brand">
+            <img src="assets/Gabryel%20Paiva-Logo.png" alt="Logo de Gabryel Paiva" class="footer-logo">
+            <div>
+                <p class="footer-titulo">Cadastro de Usuários — Atividade CRUD</p>
+                <p class="footer-texto">Projeto acadêmico de prática de operações CRUD, desenvolvido por <strong>Gabryel Paiva</strong>.</p>
+            </div>
+        </div>
+
+        <div class="footer-social">
+            <a href="https://www.linkedin.com/in/gabryel-paiva-dev/" target="_blank" rel="noopener noreferrer" class="footer-icon" aria-label="LinkedIn de Gabryel Paiva">
+                <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.1 3.77-2.1C20.6 8.6 21 11 21 14.1V21h-4v-6.2c0-1.5-.03-3.4-2.08-3.4-2.08 0-2.4 1.6-2.4 3.3V21H9z"/>
+                </svg>
+            </a>
+            <a href="https://github.com/GabryelPaivaDev" target="_blank" rel="noopener noreferrer" class="footer-icon" aria-label="GitHub de Gabryel Paiva">
+                <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-1.02-.01-1.85-2.78.62-3.37-1.19-3.37-1.19-.46-1.19-1.11-1.51-1.11-1.51-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.86.09-.66.35-1.12.64-1.38-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.72 0 0 .84-.27 2.75 1.05a9.3 9.3 0 015 0c1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.46.1 2.72.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.8-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.26 10.26 0 0022 12.25C22 6.58 17.52 2 12 2z"/>
+                </svg>
+            </a>
+        </div>
+
+        <div class="footer-unit">
+            <img src="assets/Logo-UNIT.png" alt="Logo da Unit" class="footer-logo footer-logo-unit">
+        </div>
+
+    </div>
+
+    <p class="footer-copy">© 2026 Gabryel Paiva — Todos os direitos reservados.</p>
+</footer>
+
+<!-- Modal de confirmação genérico (excluir / editar) -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box" id="modalBox" role="alertdialog" aria-modal="true" aria-labelledby="modalTitulo" aria-describedby="modalMensagem">
+
+        <div class="modal-icon" id="modalIcon">
+            <svg id="modalIconSvg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+
+        <h3 class="modal-titulo" id="modalTitulo">Confirmar ação</h3>
+        <p class="modal-mensagem" id="modalMensagem">Tem certeza?</p>
+
+        <div class="modal-acoes">
+            <button type="button" class="pushable small modal-cancelar" id="modalCancelar">
+                <span class="shadow"></span>
+                <span class="edge"></span>
+                <span class="front">Cancelar</span>
+            </button>
+
+            <button type="button" class="pushable small" id="modalConfirmar">
+                <span class="shadow"></span>
+                <span class="edge"></span>
+                <span class="front" id="modalConfirmarTexto">Confirmar</span>
+            </button>
+        </div>
+
+    </div>
 </div>
 
 <script src="js.js"></script>
