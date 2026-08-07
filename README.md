@@ -2,9 +2,11 @@
 
 # 🚀 CRUD de Usuários
 
-Sistema de gerenciamento de usuários desenvolvido com **Java + Spring Boot + PostgreSQL**.
+Sistema completo de gerenciamento de usuários desenvolvido com **Java + Spring Boot + PostgreSQL**.
 
 Projeto desenvolvido como atividade prática da disciplina de Desenvolvimento Web.
+
+<br>
 
 <img src="https://img.shields.io/badge/Java-26-red?style=for-the-badge&logo=openjdk">
 <img src="https://img.shields.io/badge/Spring_Boot-4.1-success?style=for-the-badge&logo=springboot">
@@ -21,7 +23,16 @@ Projeto desenvolvido como atividade prática da disciplina de Desenvolvimento We
 
 Este projeto consiste em um sistema completo de **CRUD (Create, Read, Update e Delete)** para gerenciamento de usuários.
 
-A aplicação foi desenvolvida utilizando arquitetura em camadas, separando o Back-end, Banco de Dados e Front-end.
+A aplicação foi desenvolvida utilizando **arquitetura em camadas**, separando:
+
+- Controller
+- Service
+- Repository
+- Entity
+- Banco de Dados
+- Front-end
+
+Toda comunicação entre a interface e o banco ocorre através de uma **API REST** desenvolvida com Spring Boot.
 
 ---
 
@@ -32,12 +43,16 @@ A aplicação foi desenvolvida utilizando arquitetura em camadas, separando o Ba
 - ✅ Consulta por ID
 - ✅ Atualização de usuários
 - ✅ Exclusão de usuários
+- ✅ API REST
+- ✅ Arquitetura em camadas
 - ✅ Validação de campos obrigatórios
 - ✅ Validação de CPF
 - ✅ Validação de telefone
+- ✅ Data de cadastro automática
+- ✅ Tratamento de usuário não encontrado
 - ✅ Interface responsiva
 - ✅ Tema Claro / Escuro
-- ✅ Comunicação Front-end ↔ API REST
+- ✅ Comunicação Front-end ↔ Back-end
 
 ---
 
@@ -46,9 +61,10 @@ A aplicação foi desenvolvida utilizando arquitetura em camadas, separando o Ba
 ## Back-end
 
 - Java 26
-- Spring Boot
+- Spring Boot 4.1
 - Spring Data JPA
 - Hibernate
+- Jakarta Validation
 - Maven
 
 ## Banco de Dados
@@ -59,13 +75,20 @@ A aplicação foi desenvolvida utilizando arquitetura em camadas, separando o Ba
 
 - HTML5
 - CSS3
-- JavaScript
+- JavaScript (ES6)
+
+## Ferramentas
+
+- IntelliJ IDEA
+- Git
+- GitHub
+- Insomnia
 
 ---
 
 # 📂 Estrutura
 
-```
+```text
 crud-usuarios
 │
 ├── src
@@ -73,16 +96,24 @@ crud-usuarios
 │       ├── java
 │       │   └── br.com.gabryel.crud_usuarios
 │       │       ├── controller
+│       │       │     └── UsuarioController.java
+│       │       │
 │       │       ├── entity
+│       │       │     └── Usuario.java
+│       │       │
 │       │       ├── repository
+│       │       │     └── UsuarioRepository.java
+│       │       │
 │       │       ├── service
-│       │       └── CrudUsuariosApplication
+│       │       │     └── UsuarioService.java
+│       │       │
+│       │       └── CrudUsuariosApplication.java
 │       │
 │       └── resources
 │           ├── static
-│           │   ├── index.html
-│           │   ├── style.css
-│           │   └── js.js
+│           │     ├── index.html
+│           │     ├── style.css
+│           │     └── js.js
 │           │
 │           ├── application.properties
 │           └── schema.sql
@@ -115,15 +146,17 @@ cd crud-usuarios
 
 Crie um banco chamado
 
-```
+```text
 crud_usuarios
 ```
 
-Depois configure o arquivo
+Configure o arquivo
 
+```text
+src/main/resources/application.properties
 ```
-application.properties
-```
+
+com suas credenciais do PostgreSQL.
 
 ---
 
@@ -131,7 +164,7 @@ application.properties
 
 Basta iniciar a classe
 
-```
+```text
 CrudUsuariosApplication.java
 ```
 
@@ -139,46 +172,76 @@ CrudUsuariosApplication.java
 
 ### Abra no navegador
 
-```
+```text
 http://localhost:8080
 ```
 
 ---
 
-# 🌐 Pontos finais
+# 🌐 Endpoints da API
 
-| Método | Ponto final | Descrição |
+| Método | Endpoint | Descrição |
 |---------|----------|-----------|
-| PEGAR | /usuários | Lista todos |
-| PEGAR | /usuários/{id} | Busca por ID |
-| POSTAR | /usuários | Cadastra usuário |
-| COLOCAR | /usuários/{id} | Atualiza usuário |
-| EXCLUIR | /usuários/{id} | Remover usuário |
+| GET | /usuarios | Lista todos |
+| GET | /usuarios/{id} | Busca por ID |
+| POST | /usuarios | Cadastra usuário |
+| PUT | /usuarios/{id} | Atualiza usuário |
+| DELETE | /usuarios/{id} | Remove usuário |
 
 ---
 
 # 💾 Banco de Dados
 
-Tabela utilizada:
+Tabela utilizada
 
-```
-usuários
+```text
+usuarios
 ```
 
-Campos:
+Campos
 
 - id
 - nome
-- e-mail
+- email
 - cpf
 - telefone
-- dadosNascimento
-- dadosCadastro
+- dataNascimento
+- dataCadastro
+
+Também acompanha o arquivo
+
+```text
+schema.sql
+```
+
+para criação da estrutura do banco.
+
+---
+
+# 🎨 Interface
+
+A aplicação possui:
+
+- 🌙 Tema Escuro
+- ☀️ Tema Claro
+- ✨ Fundo animado com estrelas
+- 📱 Layout responsivo
+- 📝 Formulário para cadastro e edição
+- 📋 Tabela dinâmica
+- 🎭 Interface moderna inspirada em dashboards
 
 ---
 
 # 👨‍💻 Autor
 
-### Gabryel Paiva
+## Gabryel Paiva
 
 Projeto desenvolvido para fins acadêmicos.
+
+---
+
+<div align="center">
+
+### ⭐ Se este projeto foi útil, deixe uma estrela no repositório!
+
+</div>
