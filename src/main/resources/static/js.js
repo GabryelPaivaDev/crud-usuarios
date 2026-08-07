@@ -13,6 +13,8 @@ const dataNascimento = document.getElementById("dataNascimento");
 const erroCpf = document.getElementById("erroCpf");
 const erroTelefone = document.getElementById("erroTelefone");
 
+const btnSalvar = form.querySelector(".btn-salvar");
+
 /* =========================================================
    Tema claro / escuro
    ========================================================= */
@@ -33,7 +35,216 @@ function aplicarTema(tema) {
 }
 
 /* =========================================================
-   Máscaras (CPF e telefone)
+   Modal único (avisos + confirmações)
+   ========================================================= */
+
+const modalOverlay = document.getElementById("modalOverlay");
+const modalBox = document.getElementById("modalBox");
+const modalIcon = document.getElementById("modalIcon");
+const modalIconSvg = document.getElementById("modalIconSvg");
+const modalTitulo = document.getElementById("modalTitulo");
+const modalMensagem = document.getElementById("modalMensagem");
+const modalAcoes = modalBox.querySelector(".modal-acoes");
+const modalCancelar = document.getElementById("modalCancelar");
+const modalConfirmar = document.getElementById("modalConfirmar");
+const modalConfirmarTexto = document.getElementById("modalConfirmarTexto");
+const modalCancelarTexto = modalCancelar.querySelector(".front");
+
+const ICONES = {
+    sucesso: '<path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>',
+    erro: '<path d="M15 9l-6 6M9 9l6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>',
+    aviso: '<path d="M12 9v4.5M12 16.5h.01M10.5 3.7L2.9 17a1.4 1.4 0 001.2 2.1h15.8a1.4 1.4 0 001.2-2.1L13.5 3.7a1.4 1.4 0 00-3 0z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
+    info: '<path d="M12 16v-4.5M12 8h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>',
+    excluir: '<path d="M4 7h16M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m2 0v13a2 2 0 01-2 2H8a2 2 0 01-2-2V7h12zM10 11v6M14 11v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
+    editar: '<path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>'
+};
+
+const TITULOS_PADRAO = {
+    sucesso: "Sucesso",
+    erro: "Erro",
+    aviso: "Atenção",
+    info: "Informação"
+};
+
+let elementoComFocoAntesDoModal = null;
+
+/**
+ * Função base: abre o modal único, configurado para aviso simples (só OK)
+ * ou para confirmação (Cancelar + Confirmar). Retorna uma Promise que
+ * resolve `true` quando o usuário confirma e `false` quando cancela/fecha.
+ */
+function abrirModalBase(opcoes) {
+
+    const {
+        titulo,
+        mensagem,
+        tipo = "info",
+        textoConfirmar = "OK",
+        textoCancelar = "Cancelar",
+        mostrarCancelar = false
+    } = opcoes;
+
+    return new Promise(function (resolve) {
+
+        modalTitulo.textContent = titulo;
+        modalMensagem.textContent = mensagem;
+        modalConfirmarTexto.textContent = textoConfirmar;
+        modalCancelarTexto.textContent = textoCancelar;
+
+        modalIconSvg.innerHTML = ICONES[tipo] || ICONES.info;
+        modalIcon.className = "modal-icon tipo-" + tipo;
+
+        modalConfirmar.classList.toggle("excluir", tipo === "erro" || tipo === "excluir");
+        modalCancelar.style.display = mostrarCancelar ? "" : "none";
+        modalAcoes.classList.toggle("somente-ok", !mostrarCancelar);
+
+        elementoComFocoAntesDoModal = document.activeElement;
+
+        modalOverlay.classList.add("aberto");
+        document.body.classList.add("modal-aberto");
+
+        requestAnimationFrame(function () {
+            modalConfirmar.focus();
+        });
+
+        function encerrar(resultado) {
+            modalOverlay.classList.remove("aberto");
+            document.body.classList.remove("modal-aberto");
+
+            modalConfirmar.removeEventListener("click", aoConfirmar);
+            modalCancelar.removeEventListener("click", aoCancelar);
+            modalOverlay.removeEventListener("click", aoClicarFora);
+            document.removeEventListener("keydown", aoTeclaEsc);
+
+            if (elementoComFocoAntesDoModal && typeof elementoComFocoAntesDoModal.focus === "function") {
+                elementoComFocoAntesDoModal.focus();
+            }
+
+            resolve(resultado);
+        }
+
+        function aoConfirmar() { encerrar(true); }
+        function aoCancelar() { encerrar(false); }
+
+        function aoClicarFora(evento) {
+            if (evento.target === modalOverlay) encerrar(false);
+        }
+
+        function aoTeclaEsc(evento) {
+            if (evento.key === "Escape") encerrar(false);
+        }
+
+        modalConfirmar.addEventListener("click", aoConfirmar);
+        modalCancelar.addEventListener("click", aoCancelar);
+        modalOverlay.addEventListener("click", aoClicarFora);
+        document.addEventListener("keydown", aoTeclaEsc);
+
+    });
+
+}
+
+function mostrarModal(tipo, mensagem, titulo) {
+    return abrirModalBase({
+        titulo: titulo || TITULOS_PADRAO[tipo] || "Aviso",
+        mensagem,
+        tipo,
+        textoConfirmar: "OK",
+        mostrarCancelar: false
+    });
+}
+
+function mostrarSucesso(mensagem, titulo) { return mostrarModal("sucesso", mensagem, titulo); }
+function mostrarErro(mensagem, titulo) { return mostrarModal("erro", mensagem, titulo); }
+function mostrarAviso(mensagem, titulo) { return mostrarModal("aviso", mensagem, titulo); }
+function mostrarInfo(mensagem, titulo) { return mostrarModal("info", mensagem, titulo); }
+
+function confirmarAcao(opcoes) {
+    return abrirModalBase({
+        titulo: opcoes.titulo,
+        mensagem: opcoes.mensagem,
+        tipo: opcoes.perigo ? "excluir" : "editar",
+        textoConfirmar: opcoes.textoConfirmar || "Confirmar",
+        textoCancelar: opcoes.textoCancelar || "Cancelar",
+        mostrarCancelar: true
+    });
+}
+
+/* =========================================================
+   Estado de carregamento nos botões
+   ========================================================= */
+
+function mostrarCarregando(botao, texto) {
+    if (!botao) return;
+    const front = botao.querySelector(".front");
+    botao.dataset.textoOriginal = front.textContent;
+    front.innerHTML = '<span class="spinner" aria-hidden="true"></span>' + texto;
+    botao.disabled = true;
+    botao.classList.add("carregando");
+}
+
+function esconderCarregando(botao) {
+    if (!botao) return;
+    const front = botao.querySelector(".front");
+    front.textContent = botao.dataset.textoOriginal || front.textContent;
+    botao.disabled = false;
+    botao.classList.remove("carregando");
+}
+
+/* =========================================================
+   Chamada de API com tratamento completo de respostas
+   ========================================================= */
+
+class ErroApi extends Error {
+    constructor(mensagem, status) {
+        super(mensagem);
+        this.status = status;
+    }
+}
+
+const MENSAGENS_PADRAO_POR_STATUS = {
+    400: "Dados inválidos. Verifique os campos preenchidos.",
+    401: "Sessão expirada ou não autorizada.",
+    403: "Você não tem permissão para realizar essa ação.",
+    404: "Usuário não encontrado.",
+    409: "Já existe um usuário cadastrado com esses dados.",
+    500: "Erro interno no servidor. Tente novamente mais tarde.",
+    503: "Serviço indisponível no momento. Tente novamente em instantes."
+};
+
+async function chamarApi(url, opcoes) {
+
+    let resposta;
+
+    try {
+        resposta = await fetch(url, opcoes);
+    } catch (erroDeRede) {
+        throw new ErroApi("Não foi possível conectar ao servidor. Verifique se ele está em execução.");
+    }
+
+    let corpo = null;
+
+    try {
+        const texto = await resposta.text();
+        corpo = texto ? JSON.parse(texto) : null;
+    } catch (erroDeParse) {
+        corpo = null;
+    }
+
+    if (resposta.ok) {
+        return corpo;
+    }
+
+    const mensagem =
+        (corpo && (corpo.erro || corpo.mensagem)) ||
+        MENSAGENS_PADRAO_POR_STATUS[resposta.status] ||
+        `Ocorreu um erro inesperado (código ${resposta.status}).`;
+
+    throw new ErroApi(mensagem, resposta.status);
+
+}
+
+/* =========================================================
+   Máscaras e validação (CPF e telefone)
    ========================================================= */
 
 cpf.addEventListener("input", function () {
@@ -84,66 +295,6 @@ function validarTelefone() {
         : "";
 
     return valido;
-}
-
-/* =========================================================
-   Modal de confirmação (excluir / editar)
-   ========================================================= */
-
-const modalOverlay = document.getElementById("modalOverlay");
-const modalBox = document.getElementById("modalBox");
-const modalIcon = document.getElementById("modalIcon");
-const modalIconSvg = document.getElementById("modalIconSvg");
-const modalTitulo = document.getElementById("modalTitulo");
-const modalMensagem = document.getElementById("modalMensagem");
-const modalCancelar = document.getElementById("modalCancelar");
-const modalConfirmar = document.getElementById("modalConfirmar");
-const modalConfirmarTexto = document.getElementById("modalConfirmarTexto");
-
-const ICONE_EXCLUIR = '<path d="M4 7h16M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m2 0v13a2 2 0 01-2 2H8a2 2 0 01-2-2V7h12zM10 11v6M14 11v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>';
-const ICONE_EDITAR = '<path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>';
-
-function confirmarAcao(opcoes) {
-
-    return new Promise(function (resolve) {
-
-        modalTitulo.textContent = opcoes.titulo;
-        modalMensagem.textContent = opcoes.mensagem;
-        modalConfirmarTexto.textContent = opcoes.textoConfirmar || "Confirmar";
-
-        modalIconSvg.innerHTML = opcoes.perigo ? ICONE_EXCLUIR : ICONE_EDITAR;
-        modalIcon.classList.toggle("perigo", !!opcoes.perigo);
-        modalConfirmar.classList.toggle("excluir", !!opcoes.perigo);
-
-        modalOverlay.classList.add("aberto");
-
-        function encerrar(resultado) {
-            modalOverlay.classList.remove("aberto");
-            modalConfirmar.removeEventListener("click", aoConfirmar);
-            modalCancelar.removeEventListener("click", aoCancelar);
-            modalOverlay.removeEventListener("click", aoClicarFora);
-            document.removeEventListener("keydown", aoTeclaEsc);
-            resolve(resultado);
-        }
-
-        function aoConfirmar() { encerrar(true); }
-        function aoCancelar() { encerrar(false); }
-
-        function aoClicarFora(evento) {
-            if (evento.target === modalOverlay) encerrar(false);
-        }
-
-        function aoTeclaEsc(evento) {
-            if (evento.key === "Escape") encerrar(false);
-        }
-
-        modalConfirmar.addEventListener("click", aoConfirmar);
-        modalCancelar.addEventListener("click", aoCancelar);
-        modalOverlay.addEventListener("click", aoClicarFora);
-        document.addEventListener("keydown", aoTeclaEsc);
-
-    });
-
 }
 
 /* =========================================================
@@ -372,47 +523,53 @@ listarUsuarios();
 
 async function listarUsuarios() {
 
-    const resposta = await fetch(API);
-    const usuarios = await resposta.json();
+    try {
 
-    tabela.innerHTML = "";
+        const usuarios = await chamarApi(API);
 
-    if (usuarios.length === 0) {
-        tabela.innerHTML = `<tr><td class="vazio" colspan="7">Nenhum usuário cadastrado ainda.</td></tr>`;
-        return;
+        tabela.innerHTML = "";
+
+        if (!usuarios || usuarios.length === 0) {
+            tabela.innerHTML = `<tr><td class="vazio" colspan="7">Nenhum usuário cadastrado ainda.</td></tr>`;
+            return;
+        }
+
+        usuarios.forEach(usuario => {
+
+            tabela.innerHTML += `
+                <tr>
+                    <td>${usuario.id}</td>
+                    <td>${usuario.nome}</td>
+                    <td>${usuario.email}</td>
+                    <td>${usuario.cpf}</td>
+                    <td>${usuario.telefone}</td>
+                    <td>${usuario.dataNascimento}</td>
+
+                    <td>
+                        <div class="acoes">
+                            <button class="pushable small editar" type="button"
+                                onclick="editarUsuario(${usuario.id}, this)">
+                                <span class="shadow"></span>
+                                <span class="edge"></span>
+                                <span class="front">Editar</span>
+                            </button>
+
+                            <button class="pushable small excluir" type="button"
+                                onclick="excluirUsuario(${usuario.id}, this)">
+                                <span class="shadow"></span>
+                                <span class="edge"></span>
+                                <span class="front">Excluir</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        });
+
+    } catch (erro) {
+        tabela.innerHTML = `<tr><td class="vazio" colspan="7">Não foi possível carregar os usuários.</td></tr>`;
+        mostrarErro(erro.message);
     }
-
-    usuarios.forEach(usuario => {
-
-        tabela.innerHTML += `
-            <tr>
-                <td>${usuario.id}</td>
-                <td>${usuario.nome}</td>
-                <td>${usuario.email}</td>
-                <td>${usuario.cpf}</td>
-                <td>${usuario.telefone}</td>
-                <td>${usuario.dataNascimento}</td>
-
-                <td>
-                    <div class="acoes">
-                        <button class="pushable small editar" type="button"
-                            onclick="editarUsuario(${usuario.id})">
-                            <span class="shadow"></span>
-                            <span class="edge"></span>
-                            <span class="front">Editar</span>
-                        </button>
-
-                        <button class="pushable small excluir" type="button"
-                            onclick="excluirUsuario(${usuario.id})">
-                            <span class="shadow"></span>
-                            <span class="edge"></span>
-                            <span class="front">Excluir</span>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        `;
-    });
 
 }
 
@@ -421,96 +578,95 @@ form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
     if (!validarCpf() || !validarTelefone()) {
+        mostrarAviso("Verifique o CPF e o telefone informados antes de continuar.", "Dados inválidos");
         return;
     }
 
     const usuario = {
-
         nome: nome.value,
         email: email.value,
         cpf: cpf.value,
         telefone: telefone.value,
         dataNascimento: dataSelecionada ? formatarDataISO(dataSelecionada) : ""
-
     };
 
-    if (id.value == "") {
+    const criando = id.value === "";
 
-        await fetch(API, {
+    mostrarCarregando(btnSalvar, criando ? "Salvando..." : "Atualizando...");
 
-            method: "POST",
+    try {
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+        if (criando) {
 
-            body: JSON.stringify(usuario)
+            await chamarApi(API, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(usuario)
+            });
 
-        });
+        } else {
 
-        limparFormulario();
-        listarUsuarios();
+            await chamarApi(`${API}/${id.value}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(usuario)
+            });
 
-    } else {
+        }
 
-        const confirmou = await confirmarAcao({
-            titulo: "Confirmar edição",
-            mensagem: `Deseja salvar as alterações feitas em "${usuario.nome}"?`,
-            textoConfirmar: "Salvar alterações",
-            perigo: false
-        });
-
-        if (!confirmou) return;
-
-        await fetch(`${API}/${id.value}`, {
-
-            method: "PUT",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify(usuario)
-
-        });
+        await mostrarSucesso(
+            criando ? "Usuário cadastrado com sucesso!" : "Usuário atualizado com sucesso!"
+        );
 
         limparFormulario();
         listarUsuarios();
 
+    } catch (erro) {
+        mostrarErro(erro.message);
+    } finally {
+        esconderCarregando(btnSalvar);
     }
 
 });
 
-async function editarUsuario(codigo) {
+async function editarUsuario(codigo, botao) {
 
-    const resposta = await fetch(`${API}/${codigo}`);
-    const usuario = await resposta.json();
+    mostrarCarregando(botao, "Buscando...");
 
-    id.value = usuario.id;
-    nome.value = usuario.nome;
-    email.value = usuario.email;
-    cpf.value = usuario.cpf;
-    telefone.value = usuario.telefone;
+    try {
 
-    dataSelecionada = isoParaData(usuario.dataNascimento);
-    dataNascimento.value = dataSelecionada ? formatarDataBR(dataSelecionada) : "";
+        const usuario = await chamarApi(`${API}/${codigo}`);
 
-    if (dataSelecionada) {
-        mesVisivel = dataSelecionada.getMonth();
-        anoVisivel = dataSelecionada.getFullYear();
+        id.value = usuario.id;
+        nome.value = usuario.nome;
+        email.value = usuario.email;
+        cpf.value = usuario.cpf;
+        telefone.value = usuario.telefone;
+
+        dataSelecionada = isoParaData(usuario.dataNascimento);
+        dataNascimento.value = dataSelecionada ? formatarDataBR(dataSelecionada) : "";
+
+        if (dataSelecionada) {
+            mesVisivel = dataSelecionada.getMonth();
+            anoVisivel = dataSelecionada.getFullYear();
+        }
+
+        erroCpf.textContent = "";
+        erroTelefone.textContent = "";
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+    } catch (erro) {
+        mostrarErro(erro.message);
+    } finally {
+        esconderCarregando(botao);
     }
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
 
 }
 
-async function excluirUsuario(codigo) {
+async function excluirUsuario(codigo, botao) {
 
-    const linha = document.querySelector(`button.excluir[onclick="excluirUsuario(${codigo})"]`)
-        ?.closest("tr");
+    const linha = botao.closest("tr");
     const nomeUsuario = linha ? linha.children[1].textContent : "este usuário";
 
     const confirmou = await confirmarAcao({
@@ -522,13 +678,19 @@ async function excluirUsuario(codigo) {
 
     if (!confirmou) return;
 
-    await fetch(`${API}/${codigo}`, {
+    mostrarCarregando(botao, "Excluindo...");
 
-        method: "DELETE"
+    try {
 
-    });
+        await chamarApi(`${API}/${codigo}`, { method: "DELETE" });
 
-    listarUsuarios();
+        await mostrarSucesso("Usuário excluído com sucesso!");
+        listarUsuarios();
+
+    } catch (erro) {
+        mostrarErro(erro.message);
+        esconderCarregando(botao);
+    }
 
 }
 

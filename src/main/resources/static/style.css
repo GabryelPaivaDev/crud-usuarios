@@ -35,6 +35,8 @@ body[data-theme="dark"] {
   --highlight-strong: #ffe27a;
   --danger: #e0446a;
   --danger-strong: #ef5c82;
+  --success: #2fd480;
+  --success-strong: #58e39c;
   --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.45);
   color-scheme: dark;
 }
@@ -60,6 +62,8 @@ body[data-theme="light"] {
   --highlight-strong: #ffb100;
   --danger: #d1274c;
   --danger-strong: #b31640;
+  --success: #1f9d5c;
+  --success-strong: #178049;
   --shadow-soft: 0 10px 30px rgba(47, 91, 224, 0.14);
   color-scheme: light;
 }
@@ -1127,3 +1131,74 @@ td .acoes {
     padding: 24px 20px 20px;
   }
 }
+/* ===========================
+   MODAL — variações por tipo + estado de carregamento
+=========================== */
+
+.modal-icon.tipo-sucesso {
+  background: rgba(47, 212, 128, 0.14);
+  color: var(--success-strong);
+}
+
+.modal-icon.tipo-erro,
+.modal-icon.tipo-excluir {
+  background: rgba(224, 68, 106, 0.14);
+  color: var(--danger-strong);
+}
+
+.modal-icon.tipo-aviso {
+  background: rgba(255, 210, 63, 0.16);
+  color: var(--highlight-strong);
+}
+
+.modal-icon.tipo-info,
+.modal-icon.tipo-editar {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.modal-acoes.somente-ok .pushable {
+  flex: 1 1 100%;
+}
+
+body.modal-aberto {
+  overflow: hidden;
+}
+
+/* Spinner de carregamento dentro dos botões */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  vertical-align: -2px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: girar 0.7s linear infinite;
+}
+
+.modal-cancelar .spinner {
+  border-color: rgba(255, 255, 255, 0.15);
+  border-top-color: var(--text-dim);
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.pushable:disabled,
+.pushable.carregando {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.pushable:disabled .front,
+.pushable.carregando .front {
+  transform: translateY(-4px);
+}
+
+/* Mensagem de erro de conexão / vazio na tabela reaproveita .vazio já existente */
