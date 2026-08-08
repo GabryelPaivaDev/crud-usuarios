@@ -8,7 +8,7 @@ Projeto desenvolvido como atividade prática da disciplina de Desenvolvimento We
 
 <br>
 
-<img src="https://img.shields.io/badge/Java-26-red?style=for-the-badge&logo=openjdk">
+<img src="https://img.shields.io/badge/Java-25-red?style=for-the-badge&logo=openjdk">
 <img src="https://img.shields.io/badge/Spring_Boot-4.1-success?style=for-the-badge&logo=springboot">
 <img src="https://img.shields.io/badge/PostgreSQL-18-blue?style=for-the-badge&logo=postgresql">
 <img src="https://img.shields.io/badge/HTML5-orange?style=for-the-badge&logo=html5">
@@ -29,6 +29,7 @@ A aplicação foi desenvolvida utilizando **arquitetura em camadas**, separando:
 - Service
 - Repository
 - Entity
+- Exception (tratamento centralizado de erros)
 - Banco de Dados
 - Front-end
 
@@ -42,14 +43,15 @@ Toda comunicação entre a interface e o banco ocorre através de uma **API REST
 - ✅ Listagem de usuários
 - ✅ Consulta por ID
 - ✅ Atualização de usuários
-- ✅ Exclusão de usuários
+- ✅ Exclusão de usuários, com modal de confirmação
 - ✅ API REST
 - ✅ Arquitetura em camadas
 - ✅ Validação de campos obrigatórios
-- ✅ Validação de CPF
-- ✅ Validação de telefone
+- ✅ Validação de CPF (formato e unicidade)
+- ✅ Validação de e-mail (formato e unicidade)
+- ✅ Validação de telefone (unicidade)
 - ✅ Data de cadastro automática
-- ✅ Tratamento de usuário não encontrado
+- ✅ Tratamento de exceções centralizado, com respostas em JSON e códigos HTTP adequados (200/201/204/400/404/409/500)
 - ✅ Interface responsiva
 - ✅ Tema Claro / Escuro
 - ✅ Comunicação Front-end ↔ Back-end
@@ -60,7 +62,7 @@ Toda comunicação entre a interface e o banco ocorre através de uma **API REST
 
 ## Back-end
 
-- Java 26
+- Java 25
 - Spring Boot 4.1
 - Spring Data JPA
 - Hibernate
@@ -107,6 +109,10 @@ crud-usuarios
 │       │       ├── service
 │       │       │     └── UsuarioService.java
 │       │       │
+│       │       ├── exception
+│       │       │     ├── GlobalExceptionHandler.java
+│       │       │     └── ResourceNotFoundException.java
+│       │       │
 │       │       └── CrudUsuariosApplication.java
 │       │
 │       └── resources
@@ -129,7 +135,7 @@ crud-usuarios
 ### Clone o projeto
 
 ```bash
-git clone https://github.com/SEU-USUARIO/crud-usuarios.git
+git clone https://github.com/GabryelPaivaDev/crud-usuarios.git
 ```
 
 ---
@@ -200,13 +206,13 @@ usuarios
 
 Campos
 
-- id
+- id (chave primária)
 - nome
-- email
-- cpf
-- telefone
+- email (único)
+- cpf (único)
+- telefone (único)
 - dataNascimento
-- dataCadastro
+- dataCadastro (preenchida automaticamente no cadastro)
 
 Também acompanha o arquivo
 
