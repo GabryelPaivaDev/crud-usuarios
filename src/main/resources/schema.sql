@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
 
     cpf VARCHAR(14) NOT NULL UNIQUE,
 
-    telefone VARCHAR(20) NOT NULL,
+    telefone VARCHAR(20) NOT NULL UNIQUE,
 
     data_nascimento DATE NOT NULL,
 

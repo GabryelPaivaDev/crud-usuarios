@@ -1,6 +1,7 @@
 package br.com.gabryel.crud_usuarios.service;
 
 import br.com.gabryel.crud_usuarios.entity.Usuario;
+import br.com.gabryel.crud_usuarios.exception.ResourceNotFoundException;
 import br.com.gabryel.crud_usuarios.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,18 +23,10 @@ public class UsuarioService {
 
     public Usuario buscarPorId(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado."));
     }
 
     public Usuario salvar(Usuario usuario) {
-
-        if (repository.existsByEmail(usuario.getEmail())) {
-            throw new RuntimeException("Já existe um usuário com este e-mail.");
-        }
-
-        if (repository.existsByCpf(usuario.getCpf())) {
-            throw new RuntimeException("Já existe um usuário com este CPF.");
-        }
 
         usuario.setDataCadastro(LocalDate.now());
 
@@ -43,18 +36,6 @@ public class UsuarioService {
     public Usuario atualizar(Long id, Usuario usuario) {
 
         Usuario existente = buscarPorId(id);
-
-        repository.findByEmail(usuario.getEmail()).ifPresent(u -> {
-            if (!u.getId().equals(id)) {
-                throw new RuntimeException("Já existe um usuário com este e-mail.");
-            }
-        });
-
-        repository.findByCpf(usuario.getCpf()).ifPresent(u -> {
-            if (!u.getId().equals(id)) {
-                throw new RuntimeException("Já existe um usuário com este CPF.");
-            }
-        });
 
         existente.setNome(usuario.getNome());
         existente.setEmail(usuario.getEmail());

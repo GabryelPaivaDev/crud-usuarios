@@ -28,7 +28,7 @@ public class Usuario {
     private String cpf;
 
     @NotBlank(message = "O telefone é obrigatório")
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, unique = true, length = 20)
     private String telefone;
 
     @Column(nullable = false)

@@ -2,6 +2,7 @@ package br.com.gabryel.crud_usuarios.controller;
 
 import br.com.gabryel.crud_usuarios.entity.Usuario;
 import br.com.gabryel.crud_usuarios.service.UsuarioService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class UsuarioController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Usuario salvar(@jakarta.validation.Valid @RequestBody Usuario usuario) {
         return service.salvar(usuario);
     }
@@ -33,11 +35,12 @@ public class UsuarioController {
 
     @PutMapping("/{id}")
     public Usuario atualizar(@PathVariable Long id,
-                         @jakarta.validation.Valid @RequestBody Usuario usuario) {
+                             @jakarta.validation.Valid @RequestBody Usuario usuario) {
         return service.atualizar(id, usuario);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Long id) {
         service.excluir(id);
     }

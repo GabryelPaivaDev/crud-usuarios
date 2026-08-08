@@ -221,10 +221,10 @@ async function chamarApi(url, opcoes) {
         throw new ErroApi("Não foi possível conectar ao servidor. Verifique se ele está em execução.");
     }
 
+    const texto = await resposta.text();
     let corpo = null;
 
     try {
-        const texto = await resposta.text();
         corpo = texto ? JSON.parse(texto) : null;
     } catch (erroDeParse) {
         corpo = null;
@@ -234,8 +234,14 @@ async function chamarApi(url, opcoes) {
         return corpo;
     }
 
+    // Se o backend ainda não responde em JSON ({ "erro": "..." }), ele costuma
+    // mandar a mensagem real como texto puro no corpo — usamos ela antes de
+    // cair na mensagem genérica, e evitamos mostrar página de erro em HTML.
+    const textoPareceUtilizavel = texto && texto.trim() && !/^\s*</.test(texto);
+
     const mensagem =
         (corpo && (corpo.erro || corpo.mensagem)) ||
+        (textoPareceUtilizavel ? texto.trim() : null) ||
         MENSAGENS_PADRAO_POR_STATUS[resposta.status] ||
         `Ocorreu um erro inesperado (código ${resposta.status}).`;
 
