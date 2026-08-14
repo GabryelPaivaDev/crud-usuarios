@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" fill="none">
+  <defs>
+    <linearGradient id="graduation-blue" x1="80" y1="55" x2="410" y2="365" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6F95FF"/><stop offset="1" stop-color="#2465F2"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(42 48) rotate(-6 205 180)">
+    <path d="m22 112 182-78 184 78-184 80L22 112Z" fill="#2465F2" opacity=".24" stroke="url(#graduation-blue)" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M82 154v88c73 45 171 45 244 0v-88l-122 53L82 154Z" stroke="#2465F2" stroke-width="8" fill="none" stroke-linejoin="round"/>
+    <path d="M388 112c-5 64-4 107 4 146" stroke="#FFD23F" stroke-width="9" stroke-linecap="round"/>
+    <circle cx="393" cy="270" r="15" fill="#FFD23F"/>
+    <g transform="translate(230 225) rotate(12)">
+      <path d="M25 24c32 11 69 11 101 0v92c-32-11-69-11-101 0V24Z" fill="#6F95FF" opacity=".34" stroke="#2465F2" stroke-width="6"/>
+      <circle cx="25" cy="24" r="18" fill="none" stroke="#6F95FF" stroke-width="7"/>
+      <circle cx="126" cy="24" r="18" fill="none" stroke="#6F95FF" stroke-width="7"/>
+      <path d="M66 31v78" stroke="#FFD23F" stroke-width="13" stroke-linecap="round"/>
+    </g>
+    <circle cx="48" cy="232" r="8" fill="#FFD23F"/>
+    <circle cx="352" cy="42" r="7" fill="#6F95FF"/>
+  </g>
+</svg>

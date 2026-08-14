@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" fill="none">
+  <defs><linearGradient id="b" x1="970" y1="120" x2="1450" y2="740" gradientUnits="userSpaceOnUse"><stop stop-color="#6F95FF"/><stop offset="1" stop-color="#2465F2"/></linearGradient></defs>
+  <g opacity=".22" stroke="url(#b)" stroke-width="3">
+    <path d="M1110 145c51-59 138-61 206-37 59 20 113 6 145 59 30 51 10 119-35 153-48 36-106 12-165 17-69 6-137 35-177-22-34-48-14-123 26-170Z"/>
+    <path d="M1130 285V190m80 95V145m80 140v-70m80 70V125" stroke-width="20" stroke-linecap="round"/>
+    <path d="M1075 548c92-42 182 38 276-3 47-20 83-19 126-2M1068 641c88-40 177 34 267-6 52-23 99-17 151 9M1084 726c82-35 157 29 241-5 58-24 106-16 160 11" stroke-dasharray="10 15"/>
+  </g>
+  <g opacity=".28">
+    <circle cx="180" cy="180" r="58" fill="#6F95FF"/><path d="M75 338c8-88 52-132 105-132s97 44 105 132H75Z" fill="#2465F2"/>
+    <circle cx="352" cy="265" r="42" fill="#FFD23F"/><path d="M278 386c6-66 37-99 74-99s68 33 74 99H278Z" fill="#FFD23F" opacity=".8"/>
+  </g>
+  <g stroke="#6F95FF" stroke-width="3" opacity=".18">
+    <path d="M180 338v150h250M352 386v102M430 488h210v160h230"/>
+    <circle cx="430" cy="488" r="10" fill="#FFD23F" stroke="none"/><circle cx="640" cy="648" r="10" fill="#6F95FF" stroke="none"/>
+  </g>
+  <path d="M-30 860c300-190 565 80 850-75s520-80 820 38" stroke="#FFD23F" stroke-width="3" opacity=".12"/>
+</svg>
