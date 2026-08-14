@@ -2,9 +2,9 @@
 
 # 🚀 CRUD de Usuários
 
-Sistema completo de gerenciamento de usuários desenvolvido com **Java + Spring Boot + PostgreSQL**.
+Sistema completo de gerenciamento de usuários desenvolvido com **Java, Spring Boot, PostgreSQL, HTML, CSS e JavaScript**.
 
-Projeto desenvolvido como atividade prática da disciplina de Desenvolvimento Web.
+Projeto desenvolvido como atividade prática da disciplina de Residência de Software III.
 
 <br>
 
@@ -21,40 +21,84 @@ Projeto desenvolvido como atividade prática da disciplina de Desenvolvimento We
 
 # 📖 Sobre
 
-Este projeto consiste em um sistema completo de **CRUD (Create, Read, Update e Delete)** para gerenciamento de usuários.
+Este projeto consiste em um sistema completo de gerenciamento de usuários, com operações de **CRUD (Create, Read, Update e Delete)**, autenticação, recuperação de senha e separação de acesso por perfil.
 
-A aplicação foi desenvolvida utilizando **arquitetura em camadas**, separando:
+A aplicação utiliza uma arquitetura em camadas, separando:
 
 - Controller
 - Service
 - Repository
 - Entity
-- Exception (tratamento centralizado de erros)
-- Banco de Dados
+- Exception
+- Banco de dados
 - Front-end
 
-Toda comunicação entre a interface e o banco ocorre através de uma **API REST** desenvolvida com Spring Boot.
+Toda a comunicação entre a interface e o banco de dados ocorre por meio de uma **API REST**, desenvolvida com Spring Boot.
+
+O sistema possui dois perfis de acesso:
+
+- **ADMIN:** acesso ao painel administrativo e ao gerenciamento de usuários.
+- **USER:** acesso à área do usuário e ao jogo Pong.
 
 ---
 
 # ✨ Funcionalidades
 
+## 🔐 Autenticação
+
+- ✅ Login de usuários
+- ✅ Cadastro de novas contas
+- ✅ Recuperação e redefinição de senha
+- ✅ Redirecionamento de acordo com o perfil
+- ✅ Perfis `ADMIN` e `USER`
+- ✅ Criação automática do administrador inicial
+- ✅ Controle da sessão do usuário no front-end
+- ✅ Logout com retorno para a tela de login
+
+## 👥 Gerenciamento de usuários
+
 - ✅ Cadastro de usuários
-- ✅ Listagem de usuários
-- ✅ Consulta por ID
+- ✅ Listagem de usuários ativos
+- ✅ Consulta de usuário por ID
 - ✅ Atualização de usuários
-- ✅ Exclusão de usuários, com modal de confirmação
-- ✅ API REST
-- ✅ Arquitetura em camadas
-- ✅ Validação de campos obrigatórios
-- ✅ Validação de CPF (formato e unicidade)
-- ✅ Validação de e-mail (formato e unicidade)
-- ✅ Validação de telefone (unicidade)
+- ✅ Exclusão lógica de usuários
+- ✅ Modal de confirmação antes da exclusão
+- ✅ Registro da data e hora da última ação
 - ✅ Data de cadastro automática
-- ✅ Tratamento de exceções centralizado, com respostas em JSON e códigos HTTP adequados (200/201/204/400/404/409/500)
-- ✅ Interface responsiva
-- ✅ Tema Claro / Escuro
-- ✅ Comunicação Front-end ↔ Back-end
+- ✅ Perfil padrão `USER`
+- ✅ Status ativo definido automaticamente
+
+## ✔️ Validações
+
+- ✅ Validação de campos obrigatórios
+- ✅ Validação do formato do e-mail
+- ✅ Validação da unicidade do e-mail
+- ✅ Validação da unicidade do CPF
+- ✅ Validação da unicidade do telefone
+- ✅ Normalização de CPF e telefone
+- ✅ Normalização do e-mail
+- ✅ Tratamento de conflitos durante cadastro e edição
+- ✅ Tratamento centralizado de exceções
+- ✅ Respostas JSON com códigos HTTP adequados
+
+## 🎨 Interface
+
+- ✅ Tela de login
+- ✅ Tela de criação de conta
+- ✅ Tela de recuperação de senha
+- ✅ Painel administrativo
+- ✅ Área exclusiva do usuário
+- ✅ Tema claro e escuro
+- ✅ Layout responsivo
+- ✅ Fundo animado com estrelas e meteoros
+- ✅ Ilustração SVG animada
+- ✅ Transições de carregamento entre as telas
+- ✅ Calendário personalizado
+- ✅ Seleção e digitação da data de nascimento
+- ✅ Máscaras para data, CPF e telefone
+- ✅ Modais e notificações personalizados
+- ✅ Rodapé padronizado
+- ✅ Jogo Pong na área do usuário
 
 ---
 
@@ -64,20 +108,23 @@ Toda comunicação entre a interface e o banco ocorre através de uma **API REST
 
 - Java 25
 - Spring Boot 4.1
+- Spring Web MVC
 - Spring Data JPA
 - Hibernate
 - Jakarta Validation
 - Maven
 
-## Banco de Dados
+## Banco de dados
 
-- PostgreSQL
+- PostgreSQL 18
 
 ## Front-end
 
 - HTML5
 - CSS3
-- JavaScript (ES6)
+- JavaScript ES6
+- SVG
+- Local Storage
 
 ## Ferramentas
 
@@ -85,10 +132,11 @@ Toda comunicação entre a interface e o banco ocorre através de uma **API REST
 - Git
 - GitHub
 - Insomnia
+- PostgreSQL
 
 ---
 
-# 📂 Estrutura
+# 📂 Estrutura do projeto
 
 ```text
 crud-usuarios
@@ -98,28 +146,45 @@ crud-usuarios
 │       ├── java
 │       │   └── br.com.gabryel.crud_usuarios
 │       │       ├── controller
-│       │       │     └── UsuarioController.java
+│       │       │   ├── AuthController.java
+│       │       │   └── UsuarioController.java
 │       │       │
 │       │       ├── entity
-│       │       │     └── Usuario.java
+│       │       │   ├── Perfil.java
+│       │       │   └── Usuario.java
 │       │       │
 │       │       ├── repository
-│       │       │     └── UsuarioRepository.java
+│       │       │   └── UsuarioRepository.java
 │       │       │
 │       │       ├── service
-│       │       │     └── UsuarioService.java
+│       │       │   └── UsuarioService.java
 │       │       │
 │       │       ├── exception
-│       │       │     ├── GlobalExceptionHandler.java
-│       │       │     └── ResourceNotFoundException.java
+│       │       │   ├── GlobalExceptionHandler.java
+│       │       │   └── ResourceNotFoundException.java
 │       │       │
 │       │       └── CrudUsuariosApplication.java
 │       │
 │       └── resources
 │           ├── static
-│           │     ├── index.html
-│           │     ├── style.css
-│           │     └── js.js
+│           │   ├── assets
+│           │   │   ├── favicon.ico
+│           │   │   ├── Gabryel Paiva-Logo.png
+│           │   │   ├── Login-SVG.svg
+│           │   │   └── Logo-UNIT.png
+│           │   │
+│           │   ├── css
+│           │   │   └── style.css
+│           │   │
+│           │   ├── js
+│           │   │   ├── admin.js
+│           │   │   ├── js.js
+│           │   │   ├── login.js
+│           │   │   └── usuario.js
+│           │   │
+│           │   ├── admin.html
+│           │   ├── index.html
+│           │   └── usuario.html
 │           │
 │           ├── application.properties
 │           └── schema.sql
@@ -130,53 +195,83 @@ crud-usuarios
 
 ---
 
-# ⚙ Como executar
+# ⚙️ Como executar
 
-### Clone o projeto
+## 1. Clone o projeto
 
 ```bash
 git clone https://github.com/GabryelPaivaDev/crud-usuarios.git
 ```
 
----
-
-### Entre na pasta
+## 2. Entre na pasta
 
 ```bash
 cd crud-usuarios
 ```
 
----
+## 3. Configure o PostgreSQL
 
-### Configure o PostgreSQL
-
-Crie um banco chamado
+Crie um banco de dados chamado:
 
 ```text
 crud_usuarios
 ```
 
-Configure o arquivo
+Depois, configure o arquivo:
 
 ```text
 src/main/resources/application.properties
 ```
 
-com suas credenciais do PostgreSQL.
+Exemplo:
 
----
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/crud_usuarios
+spring.datasource.username=postgres
+spring.datasource.password=sua_senha
 
-### Execute
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+```
 
-Basta iniciar a classe
+> Substitua `sua_senha` pela senha configurada no seu PostgreSQL.
+
+## 4. Crie a tabela
+
+O projeto acompanha o arquivo:
+
+```text
+src/main/resources/schema.sql
+```
+
+Ele contém a estrutura necessária para a criação da tabela `usuarios`.
+
+A configuração `spring.jpa.hibernate.ddl-auto=update` também permite que o Hibernate atualize a estrutura durante a inicialização.
+
+## 5. Execute o projeto
+
+Inicie a classe:
 
 ```text
 CrudUsuariosApplication.java
 ```
 
----
+Também é possível executar pelo Maven:
 
-### Abra no navegador
+### Windows
+
+```bash
+mvnw.cmd spring-boot:run
+```
+
+### Linux ou macOS
+
+```bash
+./mvnw spring-boot:run
+```
+
+## 6. Abra no navegador
 
 ```text
 http://localhost:8080
@@ -184,57 +279,119 @@ http://localhost:8080
 
 ---
 
-# 🌐 Endpoints da API
+# 🔑 Administrador inicial
 
-| Método | Endpoint | Descrição |
-|---------|----------|-----------|
-| GET | /usuarios | Lista todos |
-| GET | /usuarios/{id} | Busca por ID |
-| POST | /usuarios | Cadastra usuário |
-| PUT | /usuarios/{id} | Atualiza usuário |
-| DELETE | /usuarios/{id} | Remove usuário |
+Na primeira execução, o sistema cria automaticamente um administrador caso ele ainda não exista.
+
+```text
+E-mail: admin@unit.edu.br
+Senha: admin123
+```
+
+> Recomenda-se alterar essas credenciais antes de utilizar o projeto fora de um ambiente acadêmico.
 
 ---
 
-# 💾 Banco de Dados
+# 🌐 Endpoints da API
 
-Tabela utilizada
+## Autenticação
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| POST | `/auth/login` | Autentica um usuário |
+| POST | `/auth/register` | Cadastra uma nova conta |
+| POST | `/auth/password` | Redefine a senha do usuário |
+
+## Usuários
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| GET | `/usuarios` | Lista todos os usuários ativos |
+| GET | `/usuarios/{id}` | Busca um usuário ativo por ID |
+| POST | `/usuarios` | Cadastra um usuário |
+| PUT | `/usuarios/{id}` | Atualiza um usuário |
+| DELETE | `/usuarios/{id}` | Realiza a exclusão lógica do usuário |
+
+---
+
+# 💾 Banco de dados
+
+A aplicação utiliza a tabela:
 
 ```text
 usuarios
 ```
 
-Campos
+## Campos
 
-- id (chave primária)
-- nome
-- email (único)
-- cpf (único)
-- telefone (único)
-- dataNascimento
-- dataCadastro (preenchida automaticamente no cadastro)
+| Campo | Descrição |
+|---|---|
+| `id` | Chave primária |
+| `nome` | Nome do usuário |
+| `email` | E-mail único |
+| `senha` | Senha utilizada na autenticação |
+| `cpf` | CPF único |
+| `telefone` | Telefone único |
+| `data_nascimento` | Data de nascimento |
+| `data_cadastro` | Data de cadastro |
+| `ativo` | Indica se o usuário está ativo |
+| `data_acao` | Data e hora da última ação |
+| `perfil` | Perfil `ADMIN` ou `USER` |
 
-Também acompanha o arquivo
-
-```text
-schema.sql
-```
-
-para criação da estrutura do banco.
+A exclusão dos usuários é lógica. Portanto, o registro não é removido fisicamente do banco: o campo `ativo` passa a indicar que o usuário foi desativado.
 
 ---
 
-# 🎨 Interface
+# 🖥️ Telas
 
-A aplicação possui:
+## Tela de autenticação
 
-- 🌙 Tema Escuro
-- ☀️ Tema Claro
-- ✨ Fundo animado com estrelas
-- 📱 Layout responsivo
-- 📝 Formulário para cadastro e edição
-- 📋 Tabela dinâmica
-- 🎭 Interface moderna inspirada em dashboards
+A página inicial reúne os fluxos de:
+
+- Login
+- Criação de conta
+- Recuperação de senha
+- Tema claro e escuro
+- Calendário personalizado
+- Digitação formatada da data de nascimento
+- Animações e transições de carregamento
+
+## Painel administrativo
+
+O administrador pode:
+
+- Visualizar usuários ativos
+- Cadastrar usuários
+- Consultar informações
+- Editar usuários
+- Excluir usuários logicamente
+- Utilizar filtros e elementos interativos do painel
+
+## Área do usuário
+
+O usuário comum possui uma página exclusiva com:
+
+- Informações de acesso
+- Tema claro e escuro
+- Jogo Pong
+- Controle de dificuldade e velocidade
+- Suporte ao teclado e ao mouse
+
+---
+
+# ⚠️ Observação de segurança
+
+Este projeto foi desenvolvido para fins acadêmicos.
+
+A autenticação implementada é simplificada e ainda não utiliza:
+
+- Spring Security
+- JWT
+- Criptografia de senha com BCrypt
+- Sessão autenticada no servidor
+- Controle de autorização nos endpoints
+
+Para utilização em produção, essas funcionalidades de segurança devem ser implementadas. As senhas também não devem ser armazenadas em texto puro.
 
 ---
 
@@ -242,7 +399,9 @@ A aplicação possui:
 
 ## Gabryel Paiva
 
-Projeto desenvolvido para fins acadêmicos.
+Projeto desenvolvido para fins acadêmicos durante a disciplina de Residencia de Software III.
+
+GitHub: [GabryelPaivaDev](https://github.com/GabryelPaivaDev)
 
 ---
 
