@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Usuário — CRUD de Usuários</title>
+
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/favicon.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css?v=20260814-4">
+</head>
+
+<body data-theme="dark">
+
+<div class="pencil-loader-overlay" id="navigationLoader" aria-live="polite" aria-label="Voltando para o login"><p class="unit-scan-loader"><span>UNIT</span></p></div>
+
+<div class="waves-wrap" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+    <span class="blob blob-4"></span>
+    <span class="blob blob-5"></span>
+</div>
+
+<div class="container">
+
+    <div class="header">
+        <div class="header-top">
+            <div>
+                <p class="eyebrow">Área do usuário</p>
+                <h1 id="saudacao">Bem-vindo(a)!</h1>
+                <p class="subtitle">Enquanto isso, que tal uma partidinha de Pong?</p>
+            </div>
+
+            <div class="header-acoes">
+                <label class="switch" title="Alternar tema claro/escuro">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+
+                <button type="button" class="pushable small ghost" id="btnSair" title="Voltar ao login">
+                    <span class="shadow"></span>
+                    <span class="edge"></span>
+                    <span class="front">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                            <path d="M9 7V4a1 1 0 011-1h9a1 1 0 011 1v16a1 1 0 01-1 1h-9a1 1 0 01-1-1v-3M4 12h11M11 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Sair
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card jogo-card">
+
+        <div class="jogo-cabecalho">
+            <h2>Pong</h2>
+            <div class="jogo-dificuldade" role="group" aria-label="Dificuldade do jogo">
+                <button type="button" class="nivel-btn facil" data-nivel="facil">Fácil</button>
+                <button type="button" class="nivel-btn medio ativo" data-nivel="medio">Médio</button>
+                <button type="button" class="nivel-btn dificil" data-nivel="dificil">Difícil</button>
+            </div>
+            <div class="jogo-placar">
+                <span id="placarJogador">0</span>
+                <span class="jogo-placar-vs">×</span>
+                <span id="placarMaquina">0</span>
+            </div>
+        </div>
+
+        <p class="jogo-instrucoes">
+            Clique em <strong>Jogar</strong> para assumir o controle. Use <strong>↑</strong> / <strong>↓</strong> ou arraste sobre o jogo; <strong>Esc</strong> encerra a partida e devolve a rolagem da tela. Primeiro a 5 pontos vence.
+        </p>
+
+        <div class="jogo-tela-wrap" id="jogoTelaWrap">
+            <canvas id="pongCanvas" width="640" height="400" tabindex="0" aria-label="Jogo Pong"></canvas>
+
+            <div class="jogo-overlay" id="jogoOverlay">
+                <p id="jogoOverlayTexto">Toque ou clique para começar</p>
+                <button type="button" class="pushable btn-salvar" id="btnJogar">
+                    <span class="shadow"></span>
+                    <span class="edge"></span>
+                    <span class="front" id="btnJogarTexto">Jogar</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<footer class="site-footer">
+    <div class="footer-inner">
+
+        <div class="footer-brand">
+            <img src="assets/Gabryel%20Paiva-Logo.png" alt="Logo de Gabryel Paiva" class="footer-logo">
+            <div>
+                <p class="footer-titulo">Cadastro de Usuários — Atividade CRUD</p>
+                <p class="footer-texto">Projeto acadêmico de prática de operações CRUD, desenvolvido por <strong>Gabryel Paiva</strong>.</p>
+            </div>
+        </div>
+
+        <div class="footer-social">
+            <a href="https://www.linkedin.com/in/gabryel-paiva-dev/" target="_blank" rel="noopener noreferrer" class="footer-icon" aria-label="LinkedIn de Gabryel Paiva">
+                <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.1 3.77-2.1C20.6 8.6 21 11 21 14.1V21h-4v-6.2c0-1.5-.03-3.4-2.08-3.4-2.08 0-2.4 1.6-2.4 3.3V21H9z"/>
+                </svg>
+            </a>
+            <a href="https://github.com/GabryelPaivaDev" target="_blank" rel="noopener noreferrer" class="footer-icon" aria-label="GitHub de Gabryel Paiva">
+                <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-1.02-.01-1.85-2.78.62-3.37-1.19-3.37-1.19-.46-1.19-1.11-1.51-1.11-1.51-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.86.09-.66.35-1.12.64-1.38-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.72 0 0 .84-.27 2.75 1.05a9.3 9.3 0 015 0c1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.46.1 2.72.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.8-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.26 10.26 0 0022 12.25C22 6.58 17.52 2 12 2z"/>
+                </svg>
+            </a>
+        </div>
+
+        <div class="footer-unit">
+            <img src="assets/Logo-UNIT.png" alt="Logo da Unit" class="footer-logo footer-logo-unit">
+        </div>
+
+    </div>
+
+    <p class="footer-copy">© 2026 Gabryel Paiva — Todos os direitos reservados.</p>
+</footer>
+
+<script src="js/usuario.js?v=20260814-8"></script>
+
+</body>
+</html>

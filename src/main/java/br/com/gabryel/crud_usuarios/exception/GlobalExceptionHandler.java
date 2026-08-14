@@ -66,6 +66,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(corpoDeErro(mensagem));
     }
 
+    /** Duplicidade verificada no serviço antes de salvar. */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> tratarRegraDeNegocio(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(corpoDeErro(ex.getMessage()));
+    }
+
     /** JSON malformado ou ausente no corpo da requisição. */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, String>> tratarJsonInvalido(HttpMessageNotReadableException ex) {

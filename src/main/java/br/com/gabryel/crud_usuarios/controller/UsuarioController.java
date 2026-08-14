@@ -3,12 +3,15 @@ package br.com.gabryel.crud_usuarios.controller;
 import br.com.gabryel.crud_usuarios.entity.Usuario;
 import br.com.gabryel.crud_usuarios.service.UsuarioService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
+@CrossOrigin(origins = "*")
 public class UsuarioController {
 
     private final UsuarioService service;
@@ -17,31 +20,64 @@ public class UsuarioController {
         this.service = service;
     }
 
+    // =========================================================
+    // LISTAR USUÁRIOS ATIVOS
+    // =========================================================
+
     @GetMapping
-    public List<Usuario> listar() {
-        return service.listarTodos();
+    public ResponseEntity<List<Usuario>> listarTodos() {
+
+        return ResponseEntity.ok(service.listarTodos());
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Usuario salvar(@jakarta.validation.Valid @RequestBody Usuario usuario) {
-        return service.salvar(usuario);
-    }
+    // =========================================================
+    // BUSCAR USUÁRIO POR ID
+    // =========================================================
 
     @GetMapping("/{id}")
-    public Usuario buscarPorId(@PathVariable Long id) {
-        return service.buscarPorId(id);
+    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
+
+        return ResponseEntity.ok(service.buscarPorId(id));
     }
+
+    // =========================================================
+    // CADASTRAR USUÁRIO
+    // =========================================================
+
+    @PostMapping
+    public ResponseEntity<Usuario> salvar(@Valid @RequestBody Usuario usuario) {
+
+        Usuario usuarioSalvo = service.salvar(usuario);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(usuarioSalvo);
+    }
+
+    // =========================================================
+    // ATUALIZAR USUÁRIO
+    // =========================================================
 
     @PutMapping("/{id}")
-    public Usuario atualizar(@PathVariable Long id,
-                             @jakarta.validation.Valid @RequestBody Usuario usuario) {
-        return service.atualizar(id, usuario);
+    public ResponseEntity<Usuario> atualizar(
+            @PathVariable Long id,
+            @RequestBody Usuario usuario
+    ) {
+
+        Usuario usuarioAtualizado = service.atualizar(id, usuario);
+
+        return ResponseEntity.ok(usuarioAtualizado);
     }
 
+    // =========================================================
+    // EXCLUSÃO LÓGICA
+    // =========================================================
+
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluir(@PathVariable Long id) {
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+
         service.excluir(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "usuarios")
@@ -23,6 +24,10 @@ public class Usuario {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @NotBlank(message = "A senha é obrigatória")
+    @Column(nullable = false)
+    private String senha;
+
     @NotBlank(message = "O CPF é obrigatório")
     @Column(nullable = false, unique = true, length = 14)
     private String cpf;
@@ -37,67 +42,124 @@ public class Usuario {
     @Column(nullable = false)
     private LocalDate dataCadastro;
 
+    @Column(nullable = false)
+    private Boolean ativo;
+
+    @Column(nullable = false)
+    private LocalDateTime dataAcao;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private Perfil perfil;
+
     public Usuario() {
     }
 
     @PrePersist
     public void prePersist() {
-        this.dataCadastro = LocalDate.now();
+
+        if (this.dataCadastro == null) {
+            this.dataCadastro = LocalDate.now();
+        }
+
+        if (this.ativo == null) {
+            this.ativo = true;
+        }
+
+        if (this.dataAcao == null) {
+            this.dataAcao = LocalDateTime.now();
+        }
+
+        if (this.perfil == null) {
+            this.perfil = Perfil.USER;
+        }
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id){
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getNome(){
+    public String getNome() {
         return nome;
     }
 
-    public void setNome(String nome){
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public String getEmail(){
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email){
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getCpf(){
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(String cpf){
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
-    public String getTelefone(){
+    public String getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(String telefone){
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
 
-    public LocalDate getDataNascimento(){
+    public LocalDate getDataNascimento() {
         return dataNascimento;
     }
 
-    public void setDataNascimento(LocalDate dataNascimento){
+    public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 
-    public LocalDate getDataCadastro(){
+    public LocalDate getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(LocalDate dataCadastro){
+    public void setDataCadastro(LocalDate dataCadastro) {
         this.dataCadastro = dataCadastro;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public LocalDateTime getDataAcao() {
+        return dataAcao;
+    }
+
+    public void setDataAcao(LocalDateTime dataAcao) {
+        this.dataAcao = dataAcao;
+    }
+
+    public Perfil getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(Perfil perfil) {
+        this.perfil = perfil;
     }
 }
