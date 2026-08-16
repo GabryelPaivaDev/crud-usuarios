@@ -585,6 +585,20 @@ td .acoes {
   max-width: 320px;
 }
 
+.split-illustration > svg { display: none; }
+.admin-illustration {
+  width: 100%;
+  height: auto;
+  max-width: 360px;
+  filter: drop-shadow(0 20px 24px rgba(5, 12, 35, .28));
+  animation: admin-dashboard-float 4.6s ease-in-out infinite;
+}
+
+@keyframes admin-dashboard-float {
+  0%, 100% { transform: translateY(0) rotate(-.35deg); }
+  50% { transform: translateY(-10px) rotate(.35deg); }
+}
+
 .split-divider {
   width: 4px;
   background: linear-gradient(180deg, var(--highlight), var(--accent-strong));
@@ -1123,6 +1137,11 @@ td .acoes {
   }
   .footer-texto {
     max-width: none;
+  }
+  .footer-unit {
+    justify-self: center;
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -1674,6 +1693,12 @@ body.auth-body[data-theme="light"] .showcase-unit { filter: brightness(0) invert
   opacity: .82;
   transform: none;
 }
+.page-backdrop picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.page-backdrop picture > img { position: absolute; inset: 0; }
 .page-backdrop .backdrop-boost { display: none; }
 .auth-body .page-backdrop img { object-position: center; opacity: .72; }
 .auth-body::before { display: none; }
@@ -1689,8 +1714,8 @@ body[data-theme="light"] .page-backdrop .backdrop-boost {
   opacity: .82;
 }
 .auth-body[data-theme="dark"] .page-backdrop .graduation-backdrop {
-  opacity: .46;
-  filter: grayscale(1) brightness(0) invert(1);
+  opacity: .58;
+  filter: saturate(1.25) brightness(.92);
 }
 .auth-body[data-theme="light"] .page-backdrop .graduation-backdrop {
   opacity: .7;
@@ -1700,3 +1725,58 @@ body[data-theme="light"] .page-backdrop .backdrop-boost {
 /* O rodape do login segue o mesmo bloco das demais telas. */
 .auth-footer { width: 100%; margin-top: auto; margin-right: 0; margin-left: 0; }
 @media (max-width: 640px) { .auth-footer { width: 100%; margin-right: 0; margin-left: 0; } }
+
+/* Artes responsivas: preservam a leitura do conteúdo em tablet e celular. */
+@media (max-width: 900px) {
+  .page-backdrop picture > img { object-position: center; opacity: .9; }
+  .auth-showcase .showcase-copy { margin-top: 30px; }
+  .login-art-stage {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    min-height: 185px;
+    margin: 4px auto -10px;
+    opacity: .88;
+  }
+  .login-art-stage::before { width: min(62%, 240px); transform: rotateX(63deg) translateY(54px); }
+  .login-illustration { width: min(72%, 250px); height: 190px; }
+  .art-orb-one { width: 27px; height: 27px; left: 18%; }
+  .art-orb-two { width: 18px; height: 18px; right: 17%; }
+}
+
+@media (max-width: 480px) {
+  .login-art-stage { min-height: 145px; margin-top: 8px; }
+  .login-illustration { width: min(68%, 190px); height: 145px; }
+  .login-art-stage::before { width: min(58%, 175px); transform: rotateX(63deg) translateY(42px); }
+  .auth-showcase { padding-bottom: 18px; }
+  .admin-illustration { max-width: 245px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-illustration { animation: none; }
+}
+
+/* Regra final compartilhada pelos footers de login, ADM e usuário. */
+@media (max-width: 640px) {
+  body .site-footer .footer-inner {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    text-align: center;
+  }
+  body .site-footer .footer-brand,
+  body .site-footer .footer-social,
+  body .site-footer .footer-unit {
+    justify-self: center;
+  }
+  body .site-footer .footer-unit {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  body .site-footer .footer-logo-unit {
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
